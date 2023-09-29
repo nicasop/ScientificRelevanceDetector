@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from . import nlp
 from . import jaccard
@@ -19,12 +20,17 @@ def matrizDistanciaPonderada(matriz1,matriz2,matriz3,ponderacines):
     return matrizDistancias
 
 def matricesDistancia (datos):
-    print('===========================')
-    print(datos)
-    print('+++++++++++++++++++++++++++')
-    titulos = datos['titulo'].tolist()
-    keywords = datos['keywords'].tolist()
-    abstracts = datos['abstract'].tolist()
+    # print('===========================')
+    # print(datos)
+    # print('+++++++++++++++++++++++++++')
+    inicio = time.time()
+    # titulos = datos['titulo'].tolist()
+    # keywords = datos['keywords'].tolist()
+    # abstracts = datos['abstract'].tolist()
+    titulos = datos['Titles'].tolist()
+    keywords = datos['Keywords'].tolist()
+    abstracts = datos['Abstract'].tolist()
+
     ##NLP
     titulosL = nlp.limpiarDocumento(titulos,'en')
     keywordsL = nlp.limpiarDocumento(keywords,'en')
@@ -49,4 +55,6 @@ def matricesDistancia (datos):
     ##MATRIZ DE DISTACIAS
     ponderacion = [0.5,0.3,0.2]
     Distancias = matrizDistanciaPonderada(matrizAbs,matrizKey,matrizTit,ponderacion)
+    fin = time.time()
+    print('Tiempo de ejecución :',fin - inicio)
     return matrizTit,matrizKey,matrizAbs,Distancias
