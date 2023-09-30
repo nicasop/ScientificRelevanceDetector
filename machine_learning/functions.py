@@ -437,4 +437,20 @@ def matricesDistancia(collections):
     return matriz,matriz_keywords,matriz_distancia_abs, matriz_resultante
     # return False,False,False,False
 
-# def get_coorde
+def get_heat_map_data(matriz):
+    tam = len(matriz)-1
+    series = []
+    while tam >= 0:
+        data = []
+        for pos in range(len(matriz[tam])):
+            data.append({
+                'x': 'DOC'+str(pos+1),
+                'y': matriz[tam][pos]
+            })
+        series.append({
+            'name': 'DOC'+str(tam+1),
+            'data': data
+        })
+        tam-=1
+    return series
+    

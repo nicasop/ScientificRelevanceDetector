@@ -48,15 +48,22 @@ def matrices():
 
         # print('========================= matriz de titulos')
         # print(mT)
-        print('========================= matriz general')
+        # print('========================= matriz general')
         # print(M)
         # print(type(M))
 
-        #### transformar matriz numpy a array y a json
-        json_str = json.dumps(M.tolist())
+        #### diccionario heat map
+        heat_map = fun.get_heat_map_data(M)
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        print(heat_map)
+
+        #### JSON
+        matriz_general_str = json.dumps(M.tolist())
+        dict_heat_map = json.dumps(heat_map)
         
-        print(json_str)
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<')
+        print(matriz_general_str)
 
 
 
-        return {'matriz': json_str}
+        return {'matriz': matriz_general_str, 'heat_map': dict_heat_map}
