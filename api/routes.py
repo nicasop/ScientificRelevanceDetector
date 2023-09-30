@@ -28,15 +28,15 @@ def matrices():
     if request.method == 'POST':
         collections = json.loads(request.data)
 
-        datos_test = nlp.importarCSV("https://raw.githubusercontent.com/Freddy8-C/Proyecto_MachineLearning/master/csv/Proyecto.csv")
-        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        print(datos_test)
+        # datos_test = nlp.importarCSV("https://raw.githubusercontent.com/Freddy8-C/Proyecto_MachineLearning/master/csv/Proyecto.csv")
+        # print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        # print(datos_test)
 
-        # collections_matrix = pd.DataFrame(collections['data'])
+        collections_matrix = pd.DataFrame(collections['data'])
 
         # mT1,mK1,mA1,M1=dis.matricesDistancia(collections_matrix)
 
-        # mT1,mK1,mA1,M1 = dis.matricesDistancia(collections_matrix)
+        mT,mK,mA,M = fun.matricesDistancia(collections_matrix)
 
         # print('========================= matriz de titulos')
         # print(mT1)
@@ -44,14 +44,19 @@ def matrices():
         # print(M1)
 
 
-        mT,mK,mA,M = fun.matricesDistancia(datos_test)
+        # mT,mK,mA,M = fun.matricesDistancia(datos_test)
 
         # print('========================= matriz de titulos')
         # print(mT)
         print('========================= matriz general')
-        print(M)
         # print(M)
+        # print(type(M))
+
+        #### transformar matriz numpy a array y a json
+        json_str = json.dumps(M.tolist())
+        
+        print(json_str)
 
 
 
-        return {'status ':True}
+        return {'matriz': json_str}

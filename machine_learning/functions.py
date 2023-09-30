@@ -108,12 +108,12 @@ def jacard (titulos,matriz):
     # vectoraux_titulos=[]
     vector_titulos = []
 
-    print('\ningreso titulos: ',titulos)
+    # print('\ningreso titulos: ',titulos)
     #Se eliminan las palabras repetidas
     for lista in titulos:
         vector_titulos.append(list(set(lista)))
     
-    print('\nlimpiar palabras repetidas: ',vector_titulos)
+    # print('\nlimpiar palabras repetidas: ',vector_titulos)
 
     #se vuelve a unir las palabras
     # for frase in vector_titulos:
@@ -125,21 +125,28 @@ def jacard (titulos,matriz):
     #     vector.append(palabras_unidas)
     #     palabras_unidas = ""
     vector = [" ".join(frase) for frase in vector_titulos]
-    print('\ntitulos unidos: ',vector)
+    # print('\ntitulos unidos: ',vector)
 
     for i in range(len(vector)-1):
         for j in range(i+1,len(vector)):
-            frase=""
-            lista = []
+            # frase=""
+            # lista = []
             frase = vector[i] +" "+ vector[j]
             nueva_frase = ""
             lista = frase.split(" ")
+            # lista = [vector[i], vector[j]]
             aux.append(len(lista))
            
             for element in lista:
                if element not in nueva_frase:
                    nueva_frase = nueva_frase +" "+element
+
+            print('nueva frase: ', nueva_frase)
+
             lista = nueva_frase.split(" ")
+            
+            print('lista: ',lista)
+
             lista.pop(0)
             union.append(len(lista))
             interseccion.append(aux[cont]- len(lista))
@@ -148,9 +155,9 @@ def jacard (titulos,matriz):
 
     indice = 0
 
-    print('\nvector aux: ',aux[:5])
-    print('\nvector union: ',union[:5])
-    print('\nvector interseccion: ', interseccion[:5])
+    # print('\nvector aux: ',aux[:5])
+    # print('\nvector union: ',union[:5])
+    # print('\nvector interseccion: ', interseccion[:5])
 
     for i in range(len(matriz[1])):
         for j in range(len(matriz[1])):
@@ -166,7 +173,7 @@ def llenar_identidad(matriz):
     for i in range(len(matriz[1])):
         for j in range(len(matriz[1])):
             if(i == j):
-                matriz[i][j]=1  
+                matriz[i][j]=1
 
 def generar_vocabulario(documentos,vocabulario):
     for documento in documentos:
@@ -183,8 +190,7 @@ def frecuencias (vocabulario,abstract,frecuencia):
         lista_aux = []
 
 def llenar_palabras_documentos (vocabulario,abstract,matriz_df_idf):
-    for i in range(len(matriz_df_idf)):
-        
+    for i in range(len(matriz_df_idf)):   
         for j in range(len(matriz_df_idf[1])):
             if(j== 0):
                 if(i == 0):
@@ -430,3 +436,5 @@ def matricesDistancia(collections):
 
     return matriz,matriz_keywords,matriz_distancia_abs, matriz_resultante
     # return False,False,False,False
+
+# def get_coorde
