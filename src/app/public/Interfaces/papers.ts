@@ -3,3 +3,8 @@ export interface Papers {
   Keywords : string,
   Abstract : string
 }
+
+export interface Heatmap {
+  matriz: string,
+  heat_map: string
+}

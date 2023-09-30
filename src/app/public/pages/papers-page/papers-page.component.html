@@ -72,7 +72,7 @@
   </ng-template>
 </p-table>
 
-<div id="chart" style="color: black;">
+<div id="chart" style="color: black;" *ngIf="this.flagHeatMap">
   <apx-chart
     [series]="chartOptions.series!"
     [chart]="chartOptions.chart!"

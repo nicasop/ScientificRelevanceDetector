@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { PublicRoutingModule } from './public-routing.module';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -30,6 +31,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     ReactiveFormsModule,
     FormsModule,
     NgApexchartsModule,
+    HttpClientModule,
   ]
 })
 export class PublicModule { }

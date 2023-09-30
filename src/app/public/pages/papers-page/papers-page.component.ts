@@ -11,7 +11,7 @@ import {
   ApexAxisChartSeries,
   ApexTitleSubtitle,
   ApexDataLabels,
-  ApexChart
+  ApexChart,
 } from "ng-apexcharts";
 
 export type ChartOptions = {
@@ -32,7 +32,7 @@ export type ChartOptions = {
 export class PapersPageComponent implements OnInit {
 
   @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  public chartOptions!: Partial<ChartOptions>;
 
   constructor(
     private fb: FormBuilder,
@@ -40,90 +40,9 @@ export class PapersPageComponent implements OnInit {
     private messageService: MessageService,
     private primengConfig: PrimeNGConfig,
     public papersService : PapersServiceService
-    ) {
-      this.chartOptions = {
-        series: [
-          {
-            name: "Metric1",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric2",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric3",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric4",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric5",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric6",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric7",
-            data: this.generateData(18 ,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric8",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          },
-          {
-            name: "Metric9",
-            data: this.generateData(18,
-              0,
-              90
-            )
-          }
-        ],
-        chart: {
-          height: 350,
-          type: "heatmap",
-          foreColor:"white"
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        colors: ["#008FFB"],
-        title: {
-          text: "HeatMap Chart (Single color)",
-          style: {
-            color:"white"
-          },
-        }
-      };
-  }
+    ) { 
+      // this.chartOptions = {}
+    }
 
   public generateData(count:number, max:number,min:number) {
     var i = 0;
@@ -149,6 +68,7 @@ export class PapersPageComponent implements OnInit {
   msgPapers: Message[] = [];
   cols: any[]= [''];
   flagViewPapers : boolean = false;
+  flagHeatMap: boolean = false;
 
   _selectedColumns: any[] = [''];
 
@@ -238,9 +158,78 @@ export class PapersPageComponent implements OnInit {
       { field: 'Titles', header: 'Titles' },
       { field: 'Keywords', header: 'Keywords' },
       { field: 'Abstract', header: 'Abstract' }
-  ];
+    ];
     this._selectedColumns = this.cols
     this.myForm.reset({file:null,separetor:','})
+
+    setTimeout(() => { 
+      const heat_map_str: string | null = localStorage.getItem('heatmap');
+      const heat_map_data = JSON.parse(heat_map_str || '');
+
+      this.chartOptions = {
+        series: heat_map_data,
+        chart: {
+          height: 2000,
+          type: "heatmap",
+          foreColor:"white",
+          // zoom: {
+          //   enabled: true,
+          //   type: 'x',
+          //   autoScaleYaxis: false,
+          //   zoomedArea: {
+          //     fill: {
+          //       color: '#90CAF9',
+          //       opacity: 0.4
+          //     },
+          //     stroke: {
+          //       color: '#0D47A1',
+          //       opacity: 0.4,
+          //       width: 1
+          //     }
+          //   }
+          // }
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        colors: ["#008FFB"],
+        title: {
+          text: "HeatMap Chart (Single color)",
+          style: {
+            color:"white"
+          },
+        },
+
+      };
+
+      this.flagHeatMap = true;
+
+    }, 20000);
+    
+    // Cargar datos grafico
+    // const heat_map_str: string | null = localStorage.getItem('heatmap');
+    // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    // console.log(heat_map_str);
+    // const heat_map_data = JSON.parse(heat_map_str || '');
+
+    // this.chartOptions = {
+    //   series: heat_map_data,
+    //   chart: {
+    //     height: 350,
+    //     type: "heatmap",
+    //     foreColor:"white"
+    //   },
+    //   dataLabels: {
+    //     enabled: false,
+    //   },
+    //   colors: ["#008FFB"],
+    //   title: {
+    //     text: "HeatMap Chart (Single color)",
+    //     style: {
+    //       color:"white"
+    //     },
+    //   }
+    // };
 
   }
   //Fin de formulario

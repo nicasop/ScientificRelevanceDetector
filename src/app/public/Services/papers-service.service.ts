@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Papers } from '../Interfaces/papers';
+import { Papers, Heatmap } from '../Interfaces/papers';
 import * as Papa from 'papaparse';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 
 
 @Injectable({
@@ -8,10 +9,11 @@ import * as Papa from 'papaparse';
 })
 export class PapersServiceService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   jsonData: Papers[] = [];
   flagViewPapers:boolean = true;
+  heatmapData: any;
 
   // Convertir a JSON
   parseCsvToJSON(csvString: string, strSeparator?: string) {
@@ -37,6 +39,31 @@ export class PapersServiceService {
           Abstract: strRow.Abstract
         }));
         this.jsonData = strSelectedData as Papers[];
+
+
+        ///// llamada a la api
+        // Define los encabezados de la solicitud
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json', // Tipo de contenido
+        });
+
+        const body = {data: this.jsonData}
+        
+        this.http.post<Heatmap>('http://127.0.0.1:4000/api/matrices',
+          body,
+          {headers}).subscribe({
+          next: (res) =>{
+            console.log(res);
+            localStorage.setItem('heatmap', res.heat_map)
+            // this.heatmapData = res.heat_map;
+          },
+          error: (err) =>{
+            console.log(err);
+          }
+        }
+        )
+
+
         this.saveToLocalStorage(this.jsonData);
       }
     });
