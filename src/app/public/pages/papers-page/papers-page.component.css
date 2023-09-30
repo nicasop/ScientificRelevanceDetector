@@ -1,0 +1,12 @@
+/* styles.css o styles.scss */
+.custom-file-input::-webkit-file-upload-button {
+  background-color: transparent; /* Establece el fondo de color como transparente para navegadores basados en Webkit (como Chrome) */
+}
+
+.custom-file-input::-moz-file-upload-button {
+  background-color: transparent; /* Establece el fondo de color como transparente para navegadores basados en Mozilla (como Firefox) */
+}
+
+.custom-file-input::file-selector-button {
+  background-color: transparent; /* Establece el fondo de color como transparente para navegadores basados en Microsoft Edge */
+}

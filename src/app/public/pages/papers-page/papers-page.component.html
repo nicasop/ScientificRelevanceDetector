@@ -1,0 +1,83 @@
+<p-toast></p-toast>
+<p-toast position="top-left" key="tl"></p-toast>
+<p-toast position="top-center" key="tc"></p-toast>
+<p-toast position="bottom-center" key="bc"></p-toast>
+<p-toast position="bottom-center" key="c" [baseZIndex]="5000" (onClose)="onReject()">
+  <ng-template let-message pTemplate="message">
+      <div class="p-flex p-flex-column" style="flex: 1">
+          <div class="p-text-center">
+              <i class="pi pi-exclamation-triangle" style="font-size: 3rem"></i>
+              <h4>{{message.summary}}</h4>
+              <p>{{message.detail}}</p>
+          </div>
+      </div>
+  </ng-template>
+</p-toast>
+
+<p-messages [(value)]="msgPapers" [enableService]="false"></p-messages>
+<p-card>
+    <ng-template pTemplate="header" >
+        <p class="text-4xl m-3"> INGRESE LA BASE DE DATOS PARA TRABAJAR EN EL ANALIZADOR DE SIMILITUD</p>
+    </ng-template>
+    <form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onLoadFile()">
+      <div class="grid">
+        <div class="col-fixed" style="width:12rrem">
+          <label class="text-2xl" >Separador</label>
+          <div class="mt-2 mb-2" >
+            <input pInputText type="text" placeholder="Ingrese el separador" formControlName="separetor">
+          </div>
+          <p-message  severity="error" *ngIf="isValidField('separetor')" text="{{getFieldError('separetor')}}"> </p-message>
+        </div>
+        <div class="col-fixed" style="width:12rrem" >
+          <label class="text-2xl">Archivo</label>
+          <div class="mt-2 mb-2" >
+            <input
+            (change)="onFileSelected($event)"
+            formControlName="file"
+            type="file" class="custom-file-input col-12 text-xl "
+            accept=".csv"
+            />
+          </div>
+          <p-message  severity="error"  *ngIf="isValidField('file')" text="{{getFieldError('file')}}">  </p-message>
+          <p-progressSpinner *ngIf="boolLoading"  [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+        </div>
+        <div class="col">
+          <button class="m-2 text-2xl" pButton  type="submit" label="Subir" ></button>
+        </div>
+      </div>
+
+    </form>
+</p-card>
+
+<p-table *ngIf="this.flagViewPapers"  [columns]="selectedColumns" [value]="papersService.jsonData"  responsiveLayout="scroll">
+  <ng-template pTemplate="caption">
+      <p-multiSelect [options]="cols"  optionLabel="header" [(ngModel)]="selectedColumns"
+          selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Escoja las columnas"></p-multiSelect>
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+      <tr>
+          <th>N°</th>
+          <th *ngFor="let col of columns">
+              {{col.header}}
+          </th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product let-columns="columns" let-i="rowIndex">
+      <tr>
+          <td>{{ i + 1 }}</td>
+          <td *ngFor="let col of columns">
+            {{ product[col.field] }}
+          </td>
+      </tr>
+  </ng-template>
+</p-table>
+
+<div id="chart" style="color: black;">
+  <apx-chart
+    [series]="chartOptions.series!"
+    [chart]="chartOptions.chart!"
+    [dataLabels]="chartOptions.dataLabels!"
+    [title]="chartOptions.title!"
+    [colors]="chartOptions.colors"
+  ></apx-chart>
+</div>
