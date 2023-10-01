@@ -8,6 +8,11 @@ from nltk.stem.porter import PorterStemmer
 import math
 import numpy as np
 import time
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.manifold import MDS
+from sklearn.cluster import KMeans
 
 nltk.download('stopwords')
 n = stopwords.words("english")
@@ -131,9 +136,12 @@ def jacard (titulos,matriz):
         for j in range(i+1,len(vector)):
             # frase=""
             # lista = []
-            frase = vector[i] +" "+ vector[j]
+            # frase = vector[i] +" "+ vector[j]
+            # print('>>>>>>>>>frase: ',frase)
             nueva_frase = ""
-            lista = frase.split(" ")
+            # lista = frase.split(" ")
+            lista = vector[i].split() + vector[j].split()
+            # print('>>>>>>>>>lista: ',lista)
             # lista = [vector[i], vector[j]]
             aux.append(len(lista))
            
@@ -141,11 +149,11 @@ def jacard (titulos,matriz):
                if element not in nueva_frase:
                    nueva_frase = nueva_frase +" "+element
 
-            print('nueva frase: ', nueva_frase)
+            # print('nueva frase: ', nueva_frase)
 
             lista = nueva_frase.split(" ")
             
-            print('lista: ',lista)
+            # print('>>>>>>>>>lista1: ',lista)
 
             lista.pop(0)
             union.append(len(lista))
@@ -438,19 +446,71 @@ def matricesDistancia(collections):
     # return False,False,False,False
 
 def get_heat_map_data(matriz):
-    tam = len(matriz)-1
-    series = []
-    while tam >= 0:
-        data = []
-        for pos in range(len(matriz[tam])):
-            data.append({
-                'x': 'DOC'+str(pos+1),
-                'y': matriz[tam][pos]
-            })
-        series.append({
-            'name': 'DOC'+str(tam+1),
-            'data': data
+    xAxis = [] #vector eje x
+    yAxis = [] #vector eje y
+    data = [] #vector data
+    for i in range(len(matriz)):
+        xAxis.append({
+            'xaxis': 'D'+str(i+1)
         })
-        tam-=1
-    return series
-    
+
+        yAxis.append({
+            'yaxis': 'D'+str(i+1)
+        })
+        for j in range(len(matriz)):
+            data.append({
+                'yaxis': 'D'+str(i+1),
+                'xaxis': 'D'+str(j+1),
+                'value': matriz[i][j]
+            })
+    return xAxis, yAxis, data
+
+def get_cluster_data(matriz, grupos=4):
+    data = {
+        'name': 'Dendograma',
+        'value': len(matriz)
+    }
+
+    #clusters
+    clusters = []
+    hc = AgglomerativeClustering(n_clusters = grupos, 
+                        metric = 'euclidean', 
+                        linkage = 'ward')
+    y_hc = hc.fit_predict(matriz)
+
+    y_hc_unique = list(set(y_hc))
+    for cluster in y_hc_unique:
+        filtered = list(filter(lambda element: element[1] == cluster,enumerate(y_hc)))
+        children = [{'name': 'D' + str(child[0] + 1), 'value': int(child[1]),'children': []} for child in filtered]
+
+        clusters.append({
+            'name': 'Grupo'+str(cluster + 1),
+            'value': len(filtered),
+            'children': children
+        })
+    data.update({
+        'children': clusters
+    })
+    return data
+
+def get_scatter_data(matriz, tipoDis='euclidean',grupos=4):
+    mds = MDS(metric=True, dissimilarity=tipoDis, random_state=0)
+    coordenadas = mds.fit_transform(matriz)
+
+    kmeans = KMeans(grupos)
+    kmeans.fit(coordenadas)
+    grupos = kmeans.labels_
+    print('grupos: ',grupos)
+
+    colores = ['#0000FF', '#FFFF00', '#800080', '#008000']
+
+    data = []
+    for i in range(len(grupos)):
+        data.append({
+            'x': coordenadas[i][0],
+            'y':coordenadas[i][1],
+            'color': colores[grupos[i]],
+            'value': 'D'+str(i+1)
+        })
+
+    return data
