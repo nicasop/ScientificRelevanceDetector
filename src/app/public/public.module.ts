@@ -12,8 +12,6 @@ import { DendogramPageComponent } from './pages/dendogram-page/dendogram-page.co
 import { SchedulePageComponent } from './pages/schedule-page/schedule-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { NgApexchartsModule } from 'ng-apexcharts';
-
 
 @NgModule({
   declarations: [
@@ -30,7 +28,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     PrimeNgModule,
     ReactiveFormsModule,
     FormsModule,
-    NgApexchartsModule,
     HttpClientModule,
   ]
 })

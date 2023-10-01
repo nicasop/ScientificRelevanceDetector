@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Papers, Heatmap } from '../Interfaces/papers';
+import { Papers, Heatmap, Cluster, MDS } from '../Interfaces/papers';
 import * as Papa from 'papaparse';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 
@@ -48,14 +48,46 @@ export class PapersServiceService {
         });
 
         const body = {data: this.jsonData}
-        
-        this.http.post<Heatmap>('http://127.0.0.1:4000/api/matrices',
+
+
+        /////////////////////////// HEAT MAP
+        // this.http.post<Heatmap>('http://127.0.0.1:4000/api/heatmap',
+        //   body,
+        //   {headers}).subscribe({
+        //   next: (res) =>{
+        //     console.log(res);
+        //     localStorage.setItem('matrtiz', res.matriz)
+        //     localStorage.setItem('heatmap', res.heat_map_data)
+        //     localStorage.setItem('xaxis', res.xaxis_data)
+        //     localStorage.setItem('yaxis', res.yaxis_data)
+        //     // this.heatmapData = res.heat_map;
+        //   },
+        //   error: (err) =>{
+        //     console.log(err);
+        //   }
+        // }
+        // )
+
+        ////////////////////////////// Dendograma
+        // this.http.post<Cluster>('http://127.0.0.1:4000/api/cluster',
+        //   body,
+        //   {headers}).subscribe({
+        //   next: (res) =>{
+        //     console.log(res);
+        //     localStorage.setItem('cluster', res.cluster)
+        //   },
+        //   error: (err) =>{
+        //     console.log(err);
+        //   }
+        // }
+        // )
+
+        this.http.post<MDS>('http://127.0.0.1:4000/api/mds',
           body,
           {headers}).subscribe({
           next: (res) =>{
             console.log(res);
-            localStorage.setItem('heatmap', res.heat_map)
-            // this.heatmapData = res.heat_map;
+            localStorage.setItem('mds', res.mds)
           },
           error: (err) =>{
             console.log(err);
