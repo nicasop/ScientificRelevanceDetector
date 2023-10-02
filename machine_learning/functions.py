@@ -109,64 +109,33 @@ def jacard (titulos,matriz):
     interseccion = []
     cont = 0
     vector = []
-    # palabras_unidas =""
-    # vectoraux_titulos=[]
     vector_titulos = []
-
-    # print('\ningreso titulos: ',titulos)
     #Se eliminan las palabras repetidas
     for lista in titulos:
         vector_titulos.append(list(set(lista)))
-    
     # print('\nlimpiar palabras repetidas: ',vector_titulos)
 
     #se vuelve a unir las palabras
-    # for frase in vector_titulos:
-    #     for palabra in frase:
-    #         if ( palabras_unidas ==""):
-    #             palabras_unidas = palabra
-    #         else:
-    #             palabras_unidas = palabras_unidas +" " +palabra
-    #     vector.append(palabras_unidas)
-    #     palabras_unidas = ""
     vector = [" ".join(frase) for frase in vector_titulos]
     # print('\ntitulos unidos: ',vector)
 
     for i in range(len(vector)-1):
         for j in range(i+1,len(vector)):
-            # frase=""
-            # lista = []
-            # frase = vector[i] +" "+ vector[j]
-            # print('>>>>>>>>>frase: ',frase)
-            nueva_frase = ""
-            # lista = frase.split(" ")
+            # nueva_frase = ""
             lista = vector[i].split() + vector[j].split()
             # print('>>>>>>>>>lista: ',lista)
-            # lista = [vector[i], vector[j]]
             aux.append(len(lista))
-           
+
+            lista1 = []
             for element in lista:
-               if element not in nueva_frase:
-                   nueva_frase = nueva_frase +" "+element
+               if element not in lista1:
+                   lista1.append(element)
 
-            # print('nueva frase: ', nueva_frase)
+            union.append(len(lista1))
+            interseccion.append(aux[cont]- len(lista1))
 
-            lista = nueva_frase.split(" ")
-            
-            # print('>>>>>>>>>lista1: ',lista)
-
-            lista.pop(0)
-            union.append(len(lista))
-            interseccion.append(aux[cont]- len(lista))
             cont +=1
-
-
     indice = 0
-
-    # print('\nvector aux: ',aux[:5])
-    # print('\nvector union: ',union[:5])
-    # print('\nvector interseccion: ', interseccion[:5])
-
     for i in range(len(matriz[1])):
         for j in range(len(matriz[1])):
             if (j > i):
@@ -212,8 +181,8 @@ def llenar_matriz (frecuencia,matriz_df_idf,texto):
     for i in range(len(frecuencia)):
         for j in range (len(frecuencia[i])):
             matriz_df_idf[j+1][i+1] = texto +str(frecuencia[i][j])
+
 def llenar_matriz2 (frecuencia,matriz_df_idf,texto):
-    
     for i in range(len(frecuencia)):
             matriz_df_idf[i+1][1] = texto +str(frecuencia[i])
 
@@ -238,6 +207,7 @@ def calcular_df (lista_wtf,lista_df,vocabulario):
         index+=1
         lista_df.append(cont)
         cont=0
+
 def calcular_idf (lista_df,abstract,lista_idf):
     for dato in lista_df:
         #lista_idf.append(round(math.log(3/dato,10),2))
@@ -311,8 +281,8 @@ def llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final):
             if (j > i):
                 matriz_distancia_abs[i][j] =lista_abstract_final[indice]
                 indice+=1
+                
 def llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final):
-
     indice=0
     for i in range(0,len(matriz_distancia_abs)):
         for j in range(0,len(matriz_distancia_abs[1])): 
@@ -349,18 +319,15 @@ def matricesDistancia(collections):
     abstractTK = clean_collection(abstract)
 
     ### obtener matrices
+    ### jaccard
     matriz = np.zeros((len(titulosTK), len(titulosTK)))
     matriz_keywords = np.zeros((len(keywordTK), len(keywordTK)))
-
     llenar_identidad(matriz)
     llenar_identidad(matriz_keywords)
     jacard(titulosTK,matriz)
     jacard(keywordTK,matriz_keywords)
-    ##### Matriz de distancias de titulos ########
-    #print(matriz)
-        
-    ##### Matriz de distancias de keywords ########")
-    #print(matriz_keywords)
+
+    ###TFIDF
     vocabulario = []
     generar_vocabulario(abstractTK, vocabulario)
     matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstractTK)+1),dtype=object)
@@ -415,7 +382,6 @@ def matricesDistancia(collections):
     lista_normal =redondear(lista_normal)
 
     ###### Matriz de distancias Abstract #######
-
     matriz_distancia_abstrac(lista_normal,lista_abstract_final)
     matriz_distancia_abs = np.zeros((len(abstractTK),len(abstractTK)))
     llenar_matriz_Distancias(matriz_distancia_abs)
