@@ -15,54 +15,50 @@ from machine_learning import functions as fun
 # datos = nlp.importarCSV("https://raw.githubusercontent.com/sebas979/archicosCSV/main/DataSet.csv");
 # mT,mK,mA,M=dis.matricesDistancia(datos)
 
-@api.route('/hello', methods=['GET'])
-def hello_world():
-    return jsonify(message='¡Hola, mundo desde Flask!')
-
-@api.route('/echo/<string:message>', methods=['GET'])
-def echo_message(message):
-    return jsonify(message=message)
-
-@api.route('/heatmap', methods=['POST'])
-def matrices():
+@api.route('/papers', methods=['POST'])
+def papers():
     if request.method == 'POST':
         collections = json.loads(request.data)
         collections_matrix = pd.DataFrame(collections['data'])
         mT,mK,mA,M = fun.matricesDistancia(collections_matrix)
 
-        #### diccionario heat map
-        xaxis, yaxis, heat_map = fun.get_heat_map_data(M)
+        return {
+            'weighted_matrix': json.dumps(M.tolist()),
+            'titles_matrix': json.dumps(mT.tolist()),
+            'keywords_matrix': json.dumps(mK.tolist()),
+            'abstracts_matrix': json.dumps(mA.tolist())
+        }
 
-        # #### JSON
-        matriz_general_str = json.dumps(M.tolist())
-        dict_heat_map = json.dumps(heat_map)
-        dict_xaxis = json.dumps(xaxis)
-        dict_yaxis = json.dumps(yaxis)
+
+@api.route('/heatmap', methods=['POST'])
+def heatmap():
+    if request.method == 'POST':
+        send_data = json.loads(request.data)
+        weighted_matrix = json.loads(send_data['data'])
+
+        xaxis, yaxis, heat_map = fun.get_heat_map_data(weighted_matrix)
         
-        return {'matriz': matriz_general_str, 
-                'xaxis_data': dict_xaxis, 
-                'yaxis_data': dict_yaxis, 
-                'heat_map_data': dict_heat_map}
+        return {'xaxis': xaxis, 
+                'yaxis': yaxis, 
+                'data': heat_map}
 
 @api.route('/cluster', methods=['POST'])
 def cluster():
     if request.method == 'POST':
-        collections = json.loads(request.data)
-        collections_matrix = pd.DataFrame(collections['data'])
-        mT,mK,mA,M = fun.matricesDistancia(collections_matrix)
+        send_data = json.loads(request.data)
+        weighted_matrix = json.loads(send_data['data'])
 
-        cluster_data = fun.get_cluster_data(M,4)
+        cluster_data = fun.get_cluster_data(weighted_matrix,4)
 
-        return {'cluster': json.dumps(cluster_data)}
+        return cluster_data
 
 
 @api.route('/mds', methods=['POST'])
 def mds():
     if request.method == 'POST':
-        collections = json.loads(request.data)
-        collections_matrix = pd.DataFrame(collections['data'])
-        mT,mK,mA,M = fun.matricesDistancia(collections_matrix)
+        send_data = json.loads(request.data)
+        weighted_matrix = json.loads(send_data['data'])
 
-        mds_data = fun.get_scatter_data(M)
+        mds_data = fun.get_scatter_data(weighted_matrix)
 
-        return {'mds': json.dumps(mds_data)}
+        return mds_data
