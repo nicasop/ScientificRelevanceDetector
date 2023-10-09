@@ -4,18 +4,9 @@ export interface Papers {
   Abstract : string
 }
 
-export interface Heatmap {
-  matriz: string,
-  heat_map_data: string,
-  xaxis_data: string,
-  yaxis_data: string
+export interface PapersResponse{
+  weighted_matrix: string;
+  titles_matrix: string;
+  keywords_matrix: string;
+  abstracts_matrix: string;
 }
-
-export interface Cluster{
-  cluster: string
-}
-
-export interface MDS{
-  mds: string
-}
-

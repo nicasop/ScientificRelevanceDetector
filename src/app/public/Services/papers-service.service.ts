@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Papers, Heatmap, Cluster, MDS } from '../Interfaces/papers';
+import { Papers, PapersResponse } from '../Interfaces/papers';
 import * as Papa from 'papaparse';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 
@@ -41,7 +41,7 @@ export class PapersServiceService {
         this.jsonData = strSelectedData as Papers[];
 
 
-        ///// llamada a la api
+        //// llamada a la api
         // Define los encabezados de la solicitud
         const headers = new HttpHeaders({
           'Content-Type': 'application/json', // Tipo de contenido
@@ -49,52 +49,24 @@ export class PapersServiceService {
 
         const body = {data: this.jsonData}
 
-
-        /////////////////////////// HEAT MAP
-        // this.http.post<Heatmap>('http://127.0.0.1:4000/api/heatmap',
-        //   body,
-        //   {headers}).subscribe({
-        //   next: (res) =>{
-        //     console.log(res);
-        //     localStorage.setItem('matrtiz', res.matriz)
-        //     localStorage.setItem('heatmap', res.heat_map_data)
-        //     localStorage.setItem('xaxis', res.xaxis_data)
-        //     localStorage.setItem('yaxis', res.yaxis_data)
-        //     // this.heatmapData = res.heat_map;
-        //   },
-        //   error: (err) =>{
-        //     console.log(err);
-        //   }
-        // }
-        // )
-
-        ////////////////////////////// Dendograma
-        // this.http.post<Cluster>('http://127.0.0.1:4000/api/cluster',
-        //   body,
-        //   {headers}).subscribe({
-        //   next: (res) =>{
-        //     console.log(res);
-        //     localStorage.setItem('cluster', res.cluster)
-        //   },
-        //   error: (err) =>{
-        //     console.log(err);
-        //   }
-        // }
-        // )
-
-        this.http.post<MDS>('http://127.0.0.1:4000/api/mds',
+        //////////////////////////// Get weighted matrix
+        this.http.post<PapersResponse>('http://127.0.0.1:4000/api/papers',
           body,
-          {headers}).subscribe({
-          next: (res) =>{
+          {headers}
+        ).subscribe({
+          next: (res) => {
             console.log(res);
-            localStorage.setItem('mds', res.mds)
+            localStorage.setItem('matrix', res.weighted_matrix);
+            localStorage.setItem('titles_matrix', res.titles_matrix);
+            localStorage.setItem('keywords_matrix', res.keywords_matrix);
+            localStorage.setItem('abstracts_matrix', res.abstracts_matrix);
+
+            this.saveToLocalStorage(this.jsonData);
           },
-          error: (err) =>{
+          error: (err) => {
             console.log(err);
           }
-        }
-        )
-
+        })
 
         this.saveToLocalStorage(this.jsonData);
       }
