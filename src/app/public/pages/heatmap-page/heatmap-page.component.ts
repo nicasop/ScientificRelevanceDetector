@@ -8,7 +8,7 @@ import { HeatMap, HeatMapData, Xaxis, Yaxis } from '../../Interfaces/heatmap';
 // amCharts imports
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Dark';
 
 @Component({
   selector: 'app-heatmap-page',
@@ -18,6 +18,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 })
 export class HeatmapPageComponent implements OnInit {
 
+  flagViewHeat : boolean = false;
   msgPapers: Message[] = [];
   heatmap: HeatMap = {
     data: [],
@@ -26,63 +27,80 @@ export class HeatmapPageComponent implements OnInit {
   };
 
   constructor(
-    private heatmap_service: HeatmapServiceService, 
+    private heatmap_service: HeatmapServiceService,
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService,
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: Object,
     private zone: NgZone
-  ) { 
-    const data = localStorage.getItem('matrix');
-    this.heatmap_service.getHeatMap(data).subscribe({
-      next: res => {
-        console.log(res);
-        this.heatmap = res
-        this.drawHeatMap(this.heatmap.xaxis, this.heatmap.yaxis, this.heatmap.data);
-      },
-      error: err => {
-        console.log(err);
-        
-      }
-    })
+  ) {
+
   }
 
   ngOnInit(): void {
     this.primengConfig.ripple = true;
     console.log('init');
+    const data = localStorage.getItem('matrix');
+    this.flagViewHeat = false;
+    this.heatmap_service.getHeatMap(data).subscribe({
+      next: res => {
+        console.log("Datos")
+        console.log(res);
+        this.heatmap = res
+        this.flagViewHeat = true;
+        this.drawHeatMap(this.heatmap.xaxis, this.heatmap.yaxis, this.heatmap.data);
+      },
+      error: err => {
+        console.log(err);
+
+      }
+    })
   }
 
   ngAfterViewInit(){}
 
   drawHeatMap(xaxis:Xaxis[], yaxis:Yaxis[], data:HeatMapData[]){
-    // this.browserOnly(() => {
-    let root = am5.Root.new("chartdiv");
 
+    let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
 
     /////////// mapa de calor
     let chart = root.container.children.push(
       am5xy.XYChart.new(root, {
-        panX: false,
-        panY: false,
-        wheelX: "none",
-        wheelY: "none",
-        layout: root.verticalLayout
+        panX: true,
+        panY: true,
+        wheelY: "zoomXY",
+      pinchZoomX: true,
+      pinchZoomY: true,
+        layout: root.verticalLayout,
+
+
       })
     );
+
+       // Add scrollbars
+    chart.set("scrollbarX", am5.Scrollbar.new(root, {
+      orientation: "horizontal"
+    }));
+
+    chart.set("scrollbarY", am5.Scrollbar.new(root, {
+      orientation: "vertical"
+    }));
 
     // Create Y-axis
     let yRenderer = am5xy.AxisRendererY.new(root, {
       visible: false,
       minGridDistance: 20,
-      inversed: true
+      inversed: true,
+
+
     });
-    
+
     yRenderer.grid.template.set("visible", false);
-    
+
     let yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
       maxDeviation: 0,
       renderer: yRenderer,
-      categoryField: "yaxis"
+      categoryField: "yaxis",
     }));
 
     // Create X-Axis
@@ -91,12 +109,13 @@ export class HeatmapPageComponent implements OnInit {
       minGridDistance: 30,
       opposite:true
     });
-    
+
     xRenderer.grid.template.set("visible", false);
-    
+
     let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
       renderer: xRenderer,
-      categoryField: "xaxis"
+      categoryField: "xaxis",
+
     }));
 
     // Create series
@@ -110,15 +129,15 @@ export class HeatmapPageComponent implements OnInit {
       categoryYField: "yaxis",
       valueField: "value"
     }));
-    
+
     series.columns.template.setAll({
       tooltipText: "{value}",
       strokeOpacity: 1,
       strokeWidth: 2,
       width: am5.percent(100),
-      height: am5.percent(100)
+      height: am5.percent(100),
     });
-    
+
     series.columns.template.events.on("pointerover", function(event) {
       let di = event.target.dataItem;
       let pointData:any = di?.dataContext;
@@ -126,15 +145,12 @@ export class HeatmapPageComponent implements OnInit {
         heatLegend.showValue(pointData.value);
       }
     });
-    
+
     series.events.on("datavalidated", function() {
       heatLegend.set("startValue", series.getPrivate("valueHigh"));
       heatLegend.set("endValue", series.getPrivate("valueLow"));
     });
-    
-    
-    // Set up heat rules
-    // https://www.amcharts.com/docs/v5/concepts/settings/heat-rules/
+
     series.set("heatRules", [{
       target: series.columns.template,
       min: am5.color(0xfffb77),
@@ -155,13 +171,12 @@ export class HeatmapPageComponent implements OnInit {
     yAxis.data.setAll(yaxis);
     xAxis.data.setAll(xaxis);
 
+
     // Add cursor
     chart.set("cursor", am5xy.XYCursor.new(root, {}));
 
     chart.appear(1000, 100);
 
-    // this.root = root;
-    // });
   }
 
 }

@@ -9,7 +9,6 @@ import { Graph } from '../Interfaces/graph';
 export class GraphServiceService {
 
   constructor( private http: HttpClient ) { }
-
   getGraph(data: any):Observable<Graph>{
     // Define los encabezados de la solicitud
     const headers = new HttpHeaders({

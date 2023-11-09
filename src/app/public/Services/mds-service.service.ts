@@ -10,7 +10,6 @@ import { Observable } from 'rxjs';
 export class MdsServiceService {
 
   constructor(private http: HttpClient) { }
-
   getMDS(data: any): Observable<MDS[]>{
     // Define los encabezados de la solicitud
     const headers = new HttpHeaders({

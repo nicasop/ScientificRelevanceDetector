@@ -13,6 +13,9 @@ import {ToastModule} from 'primeng/toast';
 import {RippleModule} from 'primeng/ripple';
 import {TableModule} from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {DropdownModule} from 'primeng/dropdown';
+
 
 @NgModule({
   exports : [
@@ -29,7 +32,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ToastModule,
     RippleModule,
     TableModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ProgressBarModule,
+    DropdownModule
 
   ]
 })

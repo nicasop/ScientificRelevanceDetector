@@ -8,7 +8,7 @@ import { MDS } from '../../Interfaces/mds';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 // import * as am5hierarchy from "@amcharts/amcharts5/hierarchy";
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Dark';
 
 @Component({
   selector: 'app-mds-page',
@@ -18,32 +18,36 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 })
 export class MdsPageComponent implements OnInit {
 
+  flagViewMDS : boolean = false;
   msgPapers: Message[] = [];
   mds_data: MDS[] = [];
 
   constructor(
-    private mds_service: MdsServiceService, 
+    private mds_service: MdsServiceService,
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService,
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: Object,
     private zone: NgZone) {
-      
-      const data = localStorage.getItem('matrix');
-      this.mds_service.getMDS(data).subscribe({
-        next: res => {
-          this.mds_data = res;
-          this.drawScatter(this.mds_data)
-        },
-        error: err => {
-          console.log('error al realizar la peticion');
-        }
-      })
+
+
 
     }
 
   ngOnInit(): void {
     this.primengConfig.ripple = true;
+    this.flagViewMDS = false;
     console.log('init');
+    const data = localStorage.getItem('matrix');
+    this.mds_service.getMDS(data).subscribe({
+      next: res => {
+        this.mds_data = res;
+        this.flagViewMDS = true;
+        this.drawScatter(this.mds_data)
+      },
+      error: err => {
+        console.log('error al realizar la peticion');
+      }
+    })
   }
 
   ngAfterViewInit(){}
@@ -110,23 +114,23 @@ export class MdsPageComponent implements OnInit {
     let canvasBullets = series.children.push(am5.Graphics.new(root, {}));
 
     canvasBullets.set("draw", (display) => {
-      
-      // loop through all data items 
+
+      // loop through all data items
       am5.array.each(series.dataItems, (dataItem) => {
         // set fill style from data context
         let dataContext:any = dataItem.dataContext;
-        
+
         if (dataContext) {
           const point = dataItem.get("point");
           if (point) {
             display.beginPath();
             display.beginFill(dataContext.color);
-            display.drawCircle(point.x, point.y, 30 / 2);        
+            display.drawCircle(point.x, point.y, 30 / 2);
             display.endFill();
           }
-        }    
+        }
       })
-      
+
     })
 
     // user data is set on each redraw, so we use this to mark draw as dirty

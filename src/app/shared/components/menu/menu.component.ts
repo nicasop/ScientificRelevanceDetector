@@ -44,19 +44,12 @@ export class MenuComponent implements OnInit {
             routerLink:'mds'
           },
           {
-            label: 'Dendogram',
+            label: 'Graph',
             icon: 'pi pi-sitemap',
             style : { fontSize: '1.5em' },
             iconStyle: { fontSize: '1.3em' },
             routerLink:'dendogram'
-          },
-          {
-            label: 'Schedule',
-            icon: 'pi pi-folder',
-            style : { fontSize: '1.5em' },
-            iconStyle: { fontSize: '1.3em' },
-            routerLink:'schedule'
-          },
+          }
       ];
   }
 }

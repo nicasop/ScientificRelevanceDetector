@@ -8,7 +8,7 @@ import { GraphServiceService } from '../../Services/graph-service.service';
 // amCharts imports
 import * as am5 from '@amcharts/amcharts5';
 import * as am5hierarchy from "@amcharts/amcharts5/hierarchy";
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Dark';
 
 
 @Component({
@@ -19,6 +19,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 })
 export class DendogramPageComponent implements OnInit {
 
+  flagViewGrahp:boolean=false;
   msgPapers: Message[] = [];
   graph: Graph = {
     value: 0,
@@ -27,27 +28,31 @@ export class DendogramPageComponent implements OnInit {
   }
 
   constructor(
-    private graph_service: GraphServiceService, 
+
+    private graph_service: GraphServiceService,
     private primengConfig: PrimeNGConfig,
     private messageService: MessageService,
-    @Inject(PLATFORM_ID) private platformId: Object, 
+    @Inject(PLATFORM_ID) private platformId: Object,
     private zone: NgZone
-  ) { 
+  ) {
+
+  }
+
+  ngOnInit(): void {
+    this.primengConfig.ripple = true;
+    console.log('init');
+    this.flagViewGrahp = false;
     const data = localStorage.getItem('matrix');
     this.graph_service.getGraph(data).subscribe({
       next: res => {
         this.graph = res;
+        this.flagViewGrahp = true;
         this.drawHierarchy(this.graph)
       },
       error: err => {
         console.log(err);
       }
     })
-  }
-
-  ngOnInit(): void {
-    this.primengConfig.ripple = true;
-    console.log('init');
   }
 
   ngAfterViewInit(){}

@@ -23,8 +23,8 @@
       <div class="grid">
         <div class="col-fixed" style="width:12rrem">
           <label class="text-2xl" >Separador</label>
-          <div class="mt-2 mb-2" >
-            <input pInputText type="text" placeholder="Ingrese el separador" formControlName="separetor">
+          <div class="mt-2 mb-2 " style="width: 15rem;" >
+            <p-dropdown [options]="selectors" [(ngModel)]="selectorSelected" formControlName="separetor" ></p-dropdown>
           </div>
           <p-message  severity="error" *ngIf="isValidField('separetor')" text="{{getFieldError('separetor')}}"> </p-message>
         </div>
@@ -39,7 +39,6 @@
             />
           </div>
           <p-message  severity="error"  *ngIf="isValidField('file')" text="{{getFieldError('file')}}">  </p-message>
-          <p-progressSpinner *ngIf="boolLoading"  [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
         </div>
         <div class="col">
           <button class="m-2 text-2xl" pButton  type="submit" label="Subir" ></button>
@@ -47,13 +46,19 @@
       </div>
 
     </form>
+    <div *ngIf="boolLoading" style="width: 100%; margin-top: 2%;">
+      <h1>Cargando Datos...</h1>
+      <p-progressBar mode="indeterminate"></p-progressBar>
+    </div>
 </p-card>
 
 <p-table *ngIf="this.flagViewPapers"  [columns]="selectedColumns" [value]="papersService.jsonData"  responsiveLayout="scroll">
+  <h1>Documentos totales: </h1>
   <ng-template pTemplate="caption">
+    <h1>Documentos totales: {{this.papersService.jsonData.length}}</h1>
       <p-multiSelect [options]="cols"  optionLabel="header" [(ngModel)]="selectedColumns"
           selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Escoja las columnas"></p-multiSelect>
-  </ng-template>
+        </ng-template>
   <ng-template pTemplate="header" let-columns>
       <tr>
           <th>N°</th>
@@ -72,4 +77,3 @@
   </ng-template>
 </p-table>
 
-<div id="chartdiv" style="width: 100%; height: 800px; padding: 15px"></div>
