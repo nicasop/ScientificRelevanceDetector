@@ -411,6 +411,114 @@ def matricesDistancia(collections):
     return matriz,matriz_keywords,matriz_distancia_abs, matriz_resultante
     # return False,False,False,False
 
+def matricesDistancia_exper(csv_path):
+    #leer csv
+    collections = pd.read_csv(csv_path)
+
+    titulos = collections['Titles'].tolist()
+    keyword = collections['Keywords'].tolist()
+    abstract = collections['Abstract'].tolist()
+
+    inicio = time.time()
+    ### limpiar documentos
+    titulosTK = clean_collection(titulos)
+    keywordTK = clean_collection(keyword)
+    abstractTK = clean_collection(abstract)
+
+    ### obtener matrices
+    ### jaccard
+    matriz = np.zeros((len(titulosTK), len(titulosTK)))
+    matriz_keywords = np.zeros((len(keywordTK), len(keywordTK)))
+    llenar_identidad(matriz)
+    llenar_identidad(matriz_keywords)
+    jacard(titulosTK,matriz)
+    jacard(keywordTK,matriz_keywords)
+
+    ###TFIDF
+    vocabulario = []
+    generar_vocabulario(abstractTK, vocabulario)
+    matriz_df_idf =  np.zeros((len(vocabulario)+1, len(abstractTK)+1),dtype=object)
+    frecuencia = []
+    lista_wtf = [] 
+    lista_df = []   
+    lista_idf = []  
+    lista_tf_idf = []  
+    lista_modulo = [] 
+    lista_normal = []   
+    lista_abstract_final =[]   
+    frecuencias(vocabulario, abstractTK,frecuencia)
+    #frecuencia = [[115,10,2,0],[58,7,0,0],[20,11,6,38]]
+    llenar_palabras_documentos(vocabulario, abstractTK, matriz_df_idf)
+    llenar_matriz(frecuencia, matriz_df_idf,"Fr: ")
+    #########Term Frecuency#############")
+    #print(matriz_df_idf)
+    print()
+    #########Weight Document Frecuency#############")
+    matriz_wtf =  np.zeros((len(vocabulario)+1, len(abstractTK)+1),dtype=object)
+    calcular_wtf(frecuencia, lista_wtf)
+    llenar_palabras_documentos(vocabulario, abstractTK, matriz_wtf)
+    llenar_matriz(lista_wtf, matriz_wtf,"WTF: ")
+    #print(matriz_wtf)
+    print()
+    #########Document Frecuency#############")
+    matriz_df = np.zeros((len(vocabulario)+1, 2),dtype=object)
+    calcular_df(lista_wtf, lista_df,vocabulario)
+    llenar_palabras_documentos(vocabulario, abstractTK, matriz_df)
+    llenar_matriz2(lista_df,matriz_df,"DF: ")
+    #print(matriz_df)
+    print()
+    #########Inverse Document Frecuency#############")
+    matriz_idf = np.zeros((len(vocabulario)+1, 2),dtype=object)
+    calcular_idf(lista_df, abstractTK, lista_idf)
+    llenar_palabras_documentos(vocabulario, abstractTK, matriz_idf)
+    llenar_matriz2(lista_idf,matriz_idf,"IDF: ")
+    #print(matriz_idf)
+    print()
+    ######### TF - IDF#############")
+    matriz_tf_idf = np.zeros((len(vocabulario)+1, len(abstractTK)+1),dtype=object)
+    calcular_Tf_Idf(lista_idf, lista_wtf, lista_tf_idf)
+    lista_tf_idf =redondear(lista_tf_idf)
+    llenar_palabras_documentos(vocabulario, abstractTK, matriz_tf_idf)
+    llenar_matriz(lista_tf_idf, matriz_tf_idf, "TF-IDF: ")
+    #print(matriz_tf_idf)
+    print()
+    ######### Matriz de distancias abstract #############")
+    ####Modulo de la raiz normalizacion
+    modulo_raiz(lista_wtf, lista_modulo, vocabulario)
+    lista_normalizada(lista_wtf, lista_modulo,lista_normal)
+    lista_normal =redondear(lista_normal)
+
+    ###### Matriz de distancias Abstract #######
+    matriz_distancia_abstrac(lista_normal,lista_abstract_final)
+    matriz_distancia_abs = np.zeros((len(abstractTK),len(abstractTK)))
+    llenar_matriz_Distancias(matriz_distancia_abs)
+    llenar_valores_matriz_Distancias(matriz_distancia_abs,lista_abstract_final)
+    llenar_valores_matriz_Distancias_re(matriz_distancia_abs,lista_abstract_final)
+    #print(matriz_distancia_abs)
+    print()
+    ##### Matriz de distancias de titulos con 20%  ########")
+    matriz_tit_20 = np.around(np.matrix(matriz*0.20),2)
+    #print(matriz_tit_20)
+    print()
+    ##### Matriz de distancias de keywords con 30%  ########")
+    matriz_key_30 = np.around(np.matrix(matriz_keywords*0.30),2)
+    #print(matriz_key_30)
+    print()
+    ######### Matriz de distancias abstract 50%#############")
+    matriz_abs_50 =np.around(np.matrix(matriz_distancia_abs*0.50),2)
+    #print(matriz_abs_50)
+    print()
+    matriz_aux = np.add(matriz_tit_20,matriz_key_30)
+    matriz_resultante = np.add(matriz_aux,matriz_abs_50)
+    # print('++++++++++++++++++++++++++++++')
+    # print(matriz_resultante)
+    fin = time.time()
+    print('tiempo de ejecucion: ', fin - inicio)
+
+    return matriz,matriz_keywords,matriz_distancia_abs, matriz_resultante
+
+
+
 def get_heat_map_data(matriz):
     xAxis = [] #vector eje x
     yAxis = [] #vector eje y
@@ -433,7 +541,7 @@ def get_heat_map_data(matriz):
 
 def get_cluster_data(matriz, grupos=4):
     data = {
-        'name': 'Dendograma',
+        'name': 'Documentos Clasificados',
         'value': len(matriz)
     }
 
