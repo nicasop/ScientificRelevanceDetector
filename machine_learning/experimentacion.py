@@ -4,6 +4,7 @@ import io
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statistics
 
 def graficoMapaCalor(m,m1,m2,m3):
     ##matriz exactas
@@ -130,6 +131,23 @@ def vector_etiquetado(m,m1,m2,m3):
     # datos.to_csv('distancias.csv', index=False)
     datos.to_excel('distancias.xlsx', index=False, sheet_name='Hoja1')
 
+def get_statistic_metrics(m,titulo):
+    # Calcular la media
+    media = round(np.mean(m),2)
+    # Calcular la desviación estándar
+    desviacion_estandar = round(np.std(m),2)
+    # Obtener el valor mínimo
+    valor_minimo = np.min(m)
+    # Obtener el valor máximo
+    valor_maximo = np.max(m)
+
+    # Mostrar los resultados
+    print(titulo)
+    print(f"Media: {media}")
+    print(f"Desviación Estándar: {desviacion_estandar}")
+    print(f"Valor Mínimo: {valor_minimo}")
+    print(f"Valor Máximo: {valor_maximo}")
+
 
 mT,mK,mA,M = matricesDistancia_exper('./experimentacion/Exactas.csv')
 mT1,mK1,mA1,M1 = matricesDistancia_exper('./experimentacion/Computacion.csv')
@@ -140,4 +158,8 @@ mT3,mK3,mA3,M3 = matricesDistancia_exper('./experimentacion/Sociales.csv')
 # graficoMapaCalor(M,M1,M2,M3)
 # boxplot(M,M1,M2,M3)
 # graficoMapaCalor1(M_tot)
-vector_etiquetado(M,M1,M2,M3)
+# vector_etiquetado(M,M1,M2,M3)
+get_statistic_metrics(M, '\nExactas')
+get_statistic_metrics(M1, '\nComputación')
+get_statistic_metrics(M2, '\nMedicina')
+get_statistic_metrics(M3, '\nSociales')
