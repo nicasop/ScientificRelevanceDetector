@@ -8,7 +8,7 @@ import { HeatMap, HeatMapData, Xaxis, Yaxis } from '../../Interfaces/heatmap';
 // amCharts imports
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
-import am5themes_Animated from '@amcharts/amcharts5/themes/Dark';
+// import am5themes_Animated from '@amcharts/amcharts5/themes/Dark';
 
 @Component({
   selector: 'app-heatmap-page',
@@ -61,7 +61,7 @@ export class HeatmapPageComponent implements OnInit {
   drawHeatMap(xaxis:Xaxis[], yaxis:Yaxis[], data:HeatMapData[]){
 
     let root = am5.Root.new("chartdiv");
-    root.setThemes([am5themes_Animated.new(root)]);
+    // root.setThemes([am5themes_Animated.new(root)]);
 
     /////////// mapa de calor
     let chart = root.container.children.push(
