@@ -541,7 +541,7 @@ def get_heat_map_data(matriz):
 
 def get_cluster_data(matriz, grupos=4):
     data = {
-        'name': 'Documentos Clasificados',
+        'name': 'Classified Documents',
         'value': len(matriz)
     }
 
@@ -558,7 +558,7 @@ def get_cluster_data(matriz, grupos=4):
         children = [{'name': 'D' + str(child[0] + 1), 'value': int(child[1]),'children': []} for child in filtered]
 
         clusters.append({
-            'name': 'Grupo'+str(cluster + 1),
+            'name': 'Group '+str(cluster + 1),
             'value': len(filtered),
             'children': children
         })
