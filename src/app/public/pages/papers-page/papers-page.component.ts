@@ -62,7 +62,7 @@ export class PapersPageComponent implements OnInit {
     this.myForm.reset({file:null,separetor:','});
     this.primengConfig.ripple = true;
     this.msgPapers = [
-      {severity:'info', summary:'', detail:' El analizador de similitud escogera las filas Titles, Keywords y Abstract del CSV. Verificar que el archivo .CSV cuente con estas columnas con el nombre de lo Headers mencionados.'},
+      {severity:'info', summary:'', detail:' The similarity analyzer will select rows from the Titles, Keywords, and Abstract fields in the CSV file. Ensure that the .CSV file has these columns with the mentioned header names.'},
     ];
     this.papersService.obtenerToLocalStorage();
     this.cols = [

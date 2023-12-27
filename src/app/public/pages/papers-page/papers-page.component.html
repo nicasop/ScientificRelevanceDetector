@@ -17,19 +17,19 @@
 <p-messages [(value)]="msgPapers" [enableService]="false"></p-messages>
 <p-card>
     <ng-template pTemplate="header" >
-        <p class="text-4xl m-3"> INGRESE LA BASE DE DATOS PARA TRABAJAR EN EL ANALIZADOR DE SIMILITUD</p>
+        <p class="text-4xl m-3"> Upload the Database for Similarity Analysis</p>
     </ng-template>
     <form autocomplete="off" [formGroup]="myForm" (ngSubmit)="onLoadFile()">
       <div class="grid">
         <div class="col-fixed" style="width:12rrem">
-          <label class="text-2xl" >Separador</label>
+          <label class="text-2xl" >Separator</label>
           <div class="mt-2 mb-2 " style="width: 15rem;" >
             <p-dropdown [options]="selectors" [(ngModel)]="selectorSelected" formControlName="separetor" ></p-dropdown>
           </div>
           <p-message  severity="error" *ngIf="isValidField('separetor')" text="{{getFieldError('separetor')}}"> </p-message>
         </div>
         <div class="col-fixed" style="width:12rrem" >
-          <label class="text-2xl">Archivo</label>
+          <label class="text-2xl">File</label>
           <div class="mt-2 mb-2" >
             <input
             (change)="onFileSelected($event)"
@@ -41,7 +41,7 @@
           <p-message  severity="error"  *ngIf="isValidField('file')" text="{{getFieldError('file')}}">  </p-message>
         </div>
         <div class="col">
-          <button class="m-2 text-2xl" pButton  type="submit" label="Subir" ></button>
+          <button class="m-2 text-2xl" pButton  type="submit" label="Upload" ></button>
         </div>
       </div>
 
@@ -53,9 +53,9 @@
 </p-card>
 
 <p-table *ngIf="this.flagViewPapers"  [columns]="selectedColumns" [value]="papersService.jsonData"  responsiveLayout="scroll">
-  <h1>Documentos totales: </h1>
+  <h1>Entire Document Collection: </h1>
   <ng-template pTemplate="caption">
-    <h1>Documentos totales: {{this.papersService.jsonData.length}}</h1>
+    <h1>Entire Document Collection: {{this.papersService.jsonData.length}}</h1>
       <p-multiSelect [options]="cols"  optionLabel="header" [(ngModel)]="selectedColumns"
           selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Escoja las columnas"></p-multiSelect>
         </ng-template>
