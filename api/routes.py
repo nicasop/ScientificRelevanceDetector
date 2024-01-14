@@ -8,12 +8,7 @@ import pandas as pd
 
 api = Blueprint('api', __name__)
 
-from machine_learning import nlp
-from machine_learning import distancias as dis
 from machine_learning import functions as fun
-
-# datos = nlp.importarCSV("https://raw.githubusercontent.com/sebas979/archicosCSV/main/DataSet.csv");
-# mT,mK,mA,M=dis.matricesDistancia(datos)
 
 @api.route('/papers', methods=['POST'])
 def papers():
