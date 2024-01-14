@@ -10,6 +10,12 @@ api = Blueprint('api', __name__)
 
 from machine_learning import functions as fun
 
+@api.route('/welcome', methods=['GET'])
+def welcome():
+    return """ 
+    <h1> Welcome to our API ScientificRelevanceDetector</h1>
+ """
+
 @api.route('/papers', methods=['POST'])
 def papers():
     if request.method == 'POST':
