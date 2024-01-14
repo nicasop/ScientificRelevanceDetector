@@ -2,15 +2,28 @@
 <p-panel class="card m-2" [showHeader]="false">
   <div class="flex flex-column flex-wrap align-items-center justify-content-center card-container">
       <div class="h-4rem  w-full border-round font-bold mt-2 ml-1 mr-2 flex align-items-center justify-content-center">
-        Titulo del proyecto
+        <h2 class="text-6xl text-indigo-500">Scientific Relevance Detector</h2>
       </div>
       <hr class="w-full">
-      <div class="h-26rem w-full  mt-2 ml-1 mr-2 flex  justify-content p-3 ">
-        Descripcion del proyecto
-      </div>
-      <hr class="w-full">
-      <div class="h-15rem w-full  mt-2 ml-1 mr-2 flex justify-content p-3">
-        Footer
-      </div>
+
+      <div class="grid">
+        <div class="col-10 col-offset-1">
+            <div class=" mt-2 text-center p-3 text-justify text-2xl shadow-4 border-round-md">
+              The Document Similarity Assessment System is an advanced tool designed to analyze and visualize the similarity between academic documents from various knowledge domains. Users can manually upload a dataset in CSV format, where each record must contain critical information: the title, keywords, and abstract of the document. The platform has been specifically configured to work with documents classified in four distinct knowledge areas.
+              <br/>
+              <br/>
+              Once the user uploads the dataset, the system initiates an intelligent processing process that calculates the similarity between each pair of documents. This process is based on similarity metrics such as cosine and Jaccard. The robust processing capability enables the system to conduct a detailed assessment of the semantic relationship between the documents.
+              <br/>
+              <br/>
+              The results of this assessment are presented clearly and effectively through three visual representations: a Heat Map highlighting similarity intensities, a Two-Dimensional MDS Diagram illustrating the relative arrangement of documents in a reduced space, and a Graph revealing connections and groupings between documents. These visualizations allow users to quickly and accurately understand the similarity and relationships among the uploaded documents.
+              <br/>
+              <br/>
+              It is important to note that this system is designed to be intuitive and flexible. Users can customize their analyses, explore different similarity metrics, and adjust settings according to their specific needs. Furthermore, the system is backed by a critical approach to continuous improvement, with room for future updates and expansions based on user feedback and needs.
+              <br/>
+              <br/>
+              In summary, the Document Similarity Assessment System provides an efficient and powerful solution for evaluating similarity between documents, offering researchers and professionals a valuable tool for organizing and understanding vast sets of academic information.
+            </div>
+        </div>
+    </div>
   </div>
 </p-panel>
