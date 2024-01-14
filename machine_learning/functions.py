@@ -568,22 +568,27 @@ def get_cluster_data(matriz, grupos=4):
     return data
 
 def get_scatter_data(matriz, tipoDis='euclidean',grupos=4):
+
+    hc = AgglomerativeClustering(n_clusters = grupos, 
+                        metric = 'euclidean', 
+                        linkage = 'ward')
+    y_hc = hc.fit_predict(matriz)
+
     mds = MDS(metric=True, dissimilarity=tipoDis, random_state=0)
     coordenadas = mds.fit_transform(matriz)
 
-    kmeans = KMeans(grupos)
-    kmeans.fit(coordenadas)
-    grupos = kmeans.labels_
-    print('grupos: ',grupos)
-
     colores = ['#0000FF', '#FFFF00', '#800080', '#008000']
 
+    print('-------------------------------------')
+    print(coordenadas)
+    print('-------------------------------------')
+
     data = []
-    for i in range(len(grupos)):
+    for i in range(len(y_hc)):
         data.append({
             'x': coordenadas[i][0],
             'y':coordenadas[i][1],
-            'color': colores[grupos[i]],
+            'color': colores[y_hc[i]],
             'value': 'D'+str(i+1)
         })
 
