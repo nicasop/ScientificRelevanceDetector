@@ -16,7 +16,7 @@ export class HeatmapServiceService {
     });
 
     const body = {data: data}
-    return this.http.post<HeatMap>('http://127.0.0.1:4000/api/heatmap',
+    return this.http.post<HeatMap>('https://back-scientificrelevancedetector.onrender.com/api/heatmap',
     body,
     {headers})
   }

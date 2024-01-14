@@ -17,7 +17,7 @@ export class GraphServiceService {
 
     const body = {data: data}
 
-    return this.http.post<Graph>('http://127.0.0.1:4000/api/cluster',
+    return this.http.post<Graph>('https://back-scientificrelevancedetector.onrender.com/api/cluster',
     body,
     {headers})
   }

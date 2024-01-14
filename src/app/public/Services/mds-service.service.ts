@@ -18,7 +18,7 @@ export class MdsServiceService {
 
     const body = {data: data}
 
-    return this.http.post<MDS[]>('http://127.0.0.1:4000/api/mds',
+    return this.http.post<MDS[]>('https://back-scientificrelevancedetector.onrender.com/api/mds',
           body,
           {headers})
   }

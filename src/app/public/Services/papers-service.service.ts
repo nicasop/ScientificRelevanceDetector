@@ -50,7 +50,7 @@ export class PapersServiceService {
         const body = {data: this.jsonData}
 
         //////////////////////////// Get weighted matrix
-        this.http.post<PapersResponse>('http://127.0.0.1:4000/api/papers',
+        this.http.post<PapersResponse>('https://back-scientificrelevancedetector.onrender.com/api/papers',
           body,
           {headers}
         ).subscribe({
